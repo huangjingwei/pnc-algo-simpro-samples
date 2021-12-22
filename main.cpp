@@ -108,7 +108,6 @@ double computeAcc()
     }
 
     float accelTgt = accelTgtDist + accelTgtSpeed;
-    std::cout << "accelTgt=" << accelTgt << std::endl;
 
     return accelTgt;
 }
@@ -130,6 +129,8 @@ void generatePkgDriverCtrl()
     //填充PKG body
     ASIM_DRIVER_CTRL_t *pkgBody = (ASIM_DRIVER_CTRL_t *)(pkghead + 1);
     pkgBody->accelTgt = accelTgt;
+    
+    std::cout << "accelTgt=" << accelTgt << std::endl;
 
     msgBufferUsedSize += pkghead->headerSize + pkghead->dataSize;//更新msgBuffer的已使用空间
 }
@@ -166,6 +167,8 @@ void generateMsg()
     if (bScenarioFinished) //如果当前测试场景结束，发送trigger
     {
         //生成ASIM_PKG_ID_TRIGGER
+        
+        std::cout << "bScenarioFinished=true" << std::endl;
         ASIM_MSG_ENTRY_HDR_t *pkgTrigger = (ASIM_MSG_ENTRY_HDR_t *)(msgBuffer + msgBufferUsedSize);
 
         //填充PKG头部
@@ -331,7 +334,7 @@ static int parsePackage(char *pkgBuff)
         }
         else if (pkgHead->pkgId == ASIM_PKG_ID_END_OF_FRAME) //如果是最后一个Pkg
         {
-             //std::cout << "parsePackage   while(1)  " << std::dec << __LINE__ << std::endl;
+//              std::cout << "parsePackage   while(1)  " << std::dec << __LINE__ << std::endl;
 
             //printf("receive ASIM_PKG_ID_END_OF_FRAME\n");
             break;
@@ -786,6 +789,7 @@ int main() {
         /*向服务器发送数据包*/
         if ((sendLen = sendto(client_sockfd, msgBuffer, msgBufferUsedSize, 0, (struct sockaddr *)&remote_addr, sizeof(struct sockaddr))) < 0)//返回发送的数据长度，出错返回-1
         {
+            std::cout << "send error" << std::endl;
             perror("send error!");
             return 1;
         }
