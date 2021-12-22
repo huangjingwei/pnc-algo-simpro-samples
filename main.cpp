@@ -797,6 +797,7 @@ int main() {
         /*向服务器发送数据包*/
         if ((sendLen = send(client_sockfd, msgBuffer, msgBufferUsedSize, 0)) < 0)//返回发送的数据长度，出错返回-1
         {
+            std::cout << "send error" << std::endl;
             perror("send error!");
             return 1;
         }
