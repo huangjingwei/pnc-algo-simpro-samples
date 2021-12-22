@@ -75,8 +75,6 @@ double computeAcc()
     double ownObjectSpeedY = objData.ownObjectSpeedY; //主车横向速度
     double relativeDist = objData.relativeDist; //与前车相对距离
     objData.mMutex.unlock();
-    
-    std::cout << "recv frontVehId: " << frontVehId << "  recv frontVehSpeedX: " << objData.frontVehSpeedX << std::endl;
 
     // do we have a valid nearest object?
     bool haveSensorObject = ( frontVehId > 0 );   // sensor object must not be older than 1.0s
@@ -259,7 +257,6 @@ static int parsePackage(char *pkgBuff)
             {
                 ownObjectSpeedX = pkgData->ext.speed.x; //主车纵向速度
                 ownObjectSpeedY = pkgData->ext.speed.y; //主车横向速度
-                std::cout << "recv ego speed_x:  " << pkgData->ext.speed.x << std::endl;
 
                 break;
                 //pkgData += 1;
@@ -345,6 +342,8 @@ static int parsePackage(char *pkgBuff)
         }
         currentPkg += pkgHead->headerSize + pkgHead->dataSize; //指向下一个pkg
     }
+    
+    std::cout << "recv frontVehId: " << frontVehId << "  recv frontVehSpeedX: " << frontVehSpeedX << "  recv egoSpeedX: " << ownObjectSpeedX << std::endl;
 
     //更新数据到objData
     objData.mMutex.lock();
@@ -802,6 +801,7 @@ int main() {
         /*向服务器发送数据包*/
         int sendLen = send(client_sockfd, msgBuffer, msgBufferUsedSize, 0);
         std::cout << "time: " << time(&timestamp) << " sendLen: " << sendLen << std::endl;
+        std::cout << std::endl;
         if (sendLen < 0)//返回发送的数据长度，出错返回-1
         {
             std::cout << "send error ...." << std::endl;
