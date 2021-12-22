@@ -75,6 +75,8 @@ double computeAcc()
     double ownObjectSpeedY = objData.ownObjectSpeedY; //主车横向速度
     double relativeDist = objData.relativeDist; //与前车相对距离
     objData.mMutex.unlock();
+    
+    std::cout << "recv frontVehId: " << frontVehId << "  recv frontVehSpeedX: " << objData.frontVehSpeedX << std::endl;
 
     // do we have a valid nearest object?
     bool haveSensorObject = ( frontVehId > 0 );   // sensor object must not be older than 1.0s
@@ -257,6 +259,7 @@ static int parsePackage(char *pkgBuff)
             {
                 ownObjectSpeedX = pkgData->ext.speed.x; //主车纵向速度
                 ownObjectSpeedY = pkgData->ext.speed.y; //主车横向速度
+                std::cout << "recv ego speed_x:  " << pkgData->ext.speed.x << std::endl;
 
                 break;
                 //pkgData += 1;
