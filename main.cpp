@@ -10,6 +10,7 @@
 #include <string.h>
 #include <math.h>
 #include <mutex>
+#include <time.h>
 
 #define USE_UDP_OR_TCP false // true:使用UDP false:使用TCP
 
@@ -735,6 +736,7 @@ void recvData()
 
 int main() {
     int sendLen;
+    time_t timestamp;
     memset(&remote_addr,0,sizeof(remote_addr)); //数据初始化--清零
     remote_addr.sin_family=AF_INET; //设置为IP通信
     remote_addr.sin_addr.s_addr=inet_addr("127.0.0.1");//服务器IP地址
